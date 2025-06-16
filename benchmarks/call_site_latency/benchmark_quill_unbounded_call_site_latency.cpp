@@ -9,6 +9,9 @@
 
 #include <string>
 
+namespace
+{
+
 struct CustomFrontendOptions
 {
 #ifdef QUILL_USE_BOUNDED_DROPPING_QUEUE
@@ -57,8 +60,8 @@ void quill_benchmark(std::vector<int32_t> thread_count_array, size_t num_iterati
     }(),
     quill::FileEventNotifier{});
 
-  logger_t* logger =
-    frontend_t::create_or_get_logger("root", std::move(file_sink),
+  logger_t* logger = frontend_t::create_or_get_logger(
+    "root", std::move(file_sink),
     quill::PatternFormatterOptions{"%(time) [%(thread_id)] %(short_source_location:<28) "
                                    "LOG_%(log_level:<9) %(logger:<12) %(message)",
                                    "%H:%M:%S.%Qns", quill::Timezone::GmtTime, false});
@@ -110,5 +113,10 @@ void quill_benchmark(std::vector<int32_t> thread_count_array, size_t num_iterati
   }
 }
 
+} // namespace
+
 /***/
-int main(int argc, char* argv[]) { quill_benchmark(THREAD_LIST_COUNT, ITERATIONS); }
+int main(void) {
+  quill_benchmark(THREAD_LIST_COUNT, ITERATIONS);
+  return 0;
+}
